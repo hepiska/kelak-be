@@ -8,7 +8,7 @@
     "build": "babel src --out-dir dist",
     "serve": "node dist/index.js",
     "start": "NODE_ENV=production node server.js",
-    "watch": "NODE_ENV=production nodemon app.js --exec babel-node"
+    "watch": "nodemon app.js --exec babel-node"
   },
   "author": "hepiska",
   "license": "ISC",

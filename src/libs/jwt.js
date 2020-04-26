@@ -15,7 +15,7 @@ export const reqUserFromToken = async (req, res, next) => {
     const token = req.headers.authorization || req.headers.Authorization
     let user = verifyJwt(token)
 
-    user = await userData.findOneByID(user.id)
+    user = await userData.findOneByID(user._id)
     req.user = user
 
     return next()
