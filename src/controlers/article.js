@@ -1,15 +1,19 @@
 import articleDa from "dataAccess/article"
 import joi from "@hapi/joi"
 import { parseSort, stringToQueryObj } from "libs/helpers"
+import { uploadImage } from "libs/images"
 
 
 const ArticleSchema = joi.object().keys({
   name: joi.string().required(),
   title: joi.string(),
   primaryImage: joi.number(),
-  image: joi.array().items(joi.string()),
+  images: joi.array().items(joi.string()),
+  summary: joi.string(),
+  isHeadline: joi.boolean(),
   content: joi.string().required()
 })
+
 
 const QSkipLimitSchema = joi.object().keys({
   search: joi.string(),
@@ -24,10 +28,10 @@ const articleControlers = {
     try {
       const articleVal = await joi.validate(req.body, ArticleSchema, { stripUnknown: true })
 
-      await articleDa.create({ ...articleVal, author: req.user._id })
+      const article = await articleDa.create({ ...articleVal, author: req.user._id })
 
 
-      return res.json({ message: "create article success" })
+      return res.json({ message: "create article success", article })
 
     } catch (error) {
       throw error
@@ -51,7 +55,15 @@ const articleControlers = {
     await articleDa.delete(req.params.id)
 
     return res.json({ message: "delete article success" })
+  },
+  uploadImage: async(req, res) => {
+    const result = await uploadImage({
+      file: req.body.file,
+      fileName: req.body.fileName,
+      folder: "kelak/articles"
+    })
 
+    res.json(result)
   },
   get: async (req, res) => {
     try {

@@ -13,6 +13,12 @@ const registerSchema = joi.object().keys({
     .required()
 })
 
+const changePasswordSchema = joi.object().keys({
+  password: joi.string().required(),
+  newPassword: joi.string().required()
+
+})
+
 const loginSchema = joi.object().keys({
   email: joi.string().email({ minDomainSegments: 2 })
     .required(),
@@ -37,6 +43,7 @@ const userControler = {
       return next(error)
     }
   },
+
   login: async (req, res, next) => {
     try {
       await joi.validate(req.body, loginSchema)
@@ -60,6 +67,31 @@ const userControler = {
     } catch (error) {
       return next(error)
     }
+  },
+
+  changePassword: async (req, res, next) => {
+    try {
+      const input = await joi.validate(req.body, changePasswordSchema, { stripUnknown: true })
+      const user = await userDa.findOne({ _id: req.params.id })
+
+      if (!user) {
+        throw new Error("email or password un match")
+      }
+      const isPasswordMatch = bcrypt.compareSync(input.password, user.password)
+
+      if (!isPasswordMatch) {
+        throw new Error("password un match")
+      }
+
+      const newUser = { ...user, password: input.newPassword }
+
+      await userDa.update({ _id: user._id }, newUser)
+
+      return res.json({ message: "update password success" })
+    } catch (error) {
+      return next(error)
+    }
+
   }
 
 }

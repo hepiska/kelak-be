@@ -24,11 +24,6 @@ const userSchema = new Schema({
   },
   roles: [String],
   profile_picture: String,
-  guide: {
-    account_no: String,
-    company: String,
-    balance: Number
-  }
 },
   {
     timestamps: {

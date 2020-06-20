@@ -7,6 +7,7 @@ module.exports = express =>
     .get("/:id", article.get)
     .use(reqUserFromToken)
     .post("", article.post)
+    .post("/upload/image", article.uploadImage)
     .delete("/:id", article.delete)
     .put("/:id", article.put)
 
