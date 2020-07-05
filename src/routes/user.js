@@ -4,9 +4,9 @@ import { reqUserFromToken } from "libs/jwt"
 
 module.exports = express =>
   new express.Router().post("/", user.post)
-    // .get("", category.getAll)
-    // .get("/:id", category.get)
-    // .use(reqUserFromToken)
+    .get("", user.getAll)
+    .get("/:id", user.get)
+    .use(reqUserFromToken)
 
-    // .delete("/:id", category.delete)
-    // .put("/:id", category.put)
+    .delete("/:id", user.delete)
+    .put("/:id", user.put)
