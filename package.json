@@ -8,7 +8,8 @@
     "build": "babel src --out-dir dist",
     "serve": "node dist/index.js",
     "start": "NODE_ENV=production node server.js",
-    "watch": "nodemon app.js --exec babel-node"
+    "watch": "nodemon app.js --exec babel-node",
+    "build-docker": "docker build --tag kelakapp ."
   },
   "author": "hepiska",
   "license": "ISC",
