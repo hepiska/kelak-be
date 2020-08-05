@@ -77,7 +77,7 @@ const articleControlers = {
     }
 
   },
-  getType: (req, res) => {
+  getTypes: (req, res) => {
     return res.json({ total: articleTypes.length, articleTypes: articleTypes })
   },
   getAll: async (req, res) => {
