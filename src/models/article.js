@@ -23,6 +23,11 @@ $.schema = new Schema({
   }],
   isHeadline: Boolean,
   summary: String,
+  type: {
+    type: String,
+    required: true,
+    default: "news",
+  },
   slug: {
     type: String,
     required: true,

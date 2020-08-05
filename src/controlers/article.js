@@ -2,6 +2,7 @@ import articleDa from "dataAccess/article"
 import joi from "@hapi/joi"
 import { parseSort, stringToQueryObj } from "libs/helpers"
 import { uploadImage } from "libs/images"
+import { articleTypes } from "../../utis/constants"
 
 
 const ArticleSchema = joi.object().keys({
@@ -75,6 +76,9 @@ const articleControlers = {
       throw error
     }
 
+  },
+  getType: (req, res) => {
+    return res.json({ total: articleTypes.length, articleTypes: articleTypes })
   },
   getAll: async (req, res) => {
     try {
