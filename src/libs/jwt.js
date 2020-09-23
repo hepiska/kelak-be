@@ -16,6 +16,10 @@ export const reqUserFromToken = async (req, res, next) => {
     let user = verifyJwt(token)
 
     user = await userData.findOneByID(user._id)
+    if (!user) {
+      throw new Error("user not found")
+
+    }
     req.user = user
 
     return next()

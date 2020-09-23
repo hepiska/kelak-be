@@ -3,9 +3,10 @@ import joi from "@hapi/joi"
 import { parseSort, stringToQueryObj } from "libs/helpers"
 import { uploadImage } from "libs/images"
 import { adsTypes } from "../utis/constants"
+import { adsLimit } from "../utis/config"
 
 
-const ArticleSchema = joi.object().keys({
+const AdsSchema = joi.object().keys({
   name: joi.string().required(),
   title: joi.string().required(),
   primaryImage: joi.number(),
@@ -14,6 +15,8 @@ const ArticleSchema = joi.object().keys({
   end_at: joi.date().required(),
   summary: joi.string(),
   type: joi.string(),
+  articles_show: joi.array().items(joi.string()),
+  collection_show: joi.array().items(joi.string()),
   content: joi.string()
 })
 
@@ -43,12 +46,29 @@ const articleControlers = {
   },
   post: async (req, res, next) => {
     try {
-      const articleVal = await joi.validate(req.body, ArticleSchema, { stripUnknown: true })
+      const adsVal = await joi.validate(req.body, AdsSchema, { stripUnknown: true })
+      const arcQuery = { type: adsVal.type,
+        start_at: { $gte: adsVal.start_at, $lte: adsVal.end_at },
+        end_at: { $lte: adsVal.end_at, $gte: adsVal.start_at } }
 
-      const article = await adsDa.create({ ...articleVal, author: req.user._id })
+      if (adsVal.articles_show && adsVal.articles_show.length) {
+        arcQuery.articles_show = { $in: adsVal.articles_show }
+      }
+      if (adsVal.collection_show && adsVal.collection_show.length) {
+        arcQuery.articles_show = { $in: adsVal.collection_show }
+      }
+      const adscount = await adsDa.find(arcQuery, { skip: 0, limit: 1 })
+
+      if (adscount.total >= adsLimit[adsVal.type]) {
+
+        throw new Error("jumlah iklan melibihi batas")
+      }
 
 
-      return res.json({ message: "create article success", article })
+      const ads = await adsDa.create({ ...adsVal, author: req.user._id })
+
+
+      return res.json({ message: "create article success", ads })
 
     } catch (error) {
       return next(error)
@@ -57,9 +77,9 @@ const articleControlers = {
   },
   put: async (req, res, next) => {
     try {
-      const articleVal = await joi.validate(req.body, ArticleSchema, { stripUnknown: true })
+      const adsVal = await joi.validate(req.body, AdsSchema, { stripUnknown: true })
 
-      await adsDa.update({ _id: req.params.id }, { ...articleVal, author: req.user._id })
+      await adsDa.update({ _id: req.params.id }, { ...adsVal, author: req.user._id })
 
       return res.json({ message: "update article success" })
 
