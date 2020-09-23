@@ -1,20 +1,20 @@
-import articleDa from "dataAccess/article"
+import adsDa from "dataAccess/ads"
 import joi from "@hapi/joi"
 import { parseSort, stringToQueryObj } from "libs/helpers"
 import { uploadImage } from "libs/images"
-import { articleTypes } from "../utis/constants"
+import { adsTypes } from "../utis/constants"
 
 
 const ArticleSchema = joi.object().keys({
   name: joi.string().required(),
-  title: joi.string(),
+  title: joi.string().required(),
   primaryImage: joi.number(),
-  categories: joi.array().items(joi.string()),
   images: joi.array().items(joi.string()),
-  type: joi.string().required(),
+  start_at: joi.date().required(),
+  end_at: joi.date().required(),
   summary: joi.string(),
-  isHeadline: joi.boolean(),
-  content: joi.string().required()
+  type: joi.string(),
+  content: joi.string()
 })
 
 
@@ -27,11 +27,25 @@ const QSkipLimitSchema = joi.object().keys({
 
 
 const articleControlers = {
+  getAll: async (req, res, next) => {
+    try {
+      const { skip, limit, sort, search } = await joi.validate(req.query, QSkipLimitSchema)
+      const query = stringToQueryObj(search)
+      const sortParsed = parseSort(sort)
+      const articles = await adsDa.find(query, { skip: skip, limit, sort: sortParsed })
+
+
+      return res.json(articles)
+
+    } catch (error) {
+      return next(error)
+    }
+  },
   post: async (req, res, next) => {
     try {
       const articleVal = await joi.validate(req.body, ArticleSchema, { stripUnknown: true })
 
-      const article = await articleDa.create({ ...articleVal, author: req.user._id })
+      const article = await adsDa.create({ ...articleVal, author: req.user._id })
 
 
       return res.json({ message: "create article success", article })
@@ -45,7 +59,7 @@ const articleControlers = {
     try {
       const articleVal = await joi.validate(req.body, ArticleSchema, { stripUnknown: true })
 
-      await articleDa.update({ _id: req.params.id }, { ...articleVal, author: req.user._id })
+      await adsDa.update({ _id: req.params.id }, { ...articleVal, author: req.user._id })
 
       return res.json({ message: "update article success" })
 
@@ -54,51 +68,35 @@ const articleControlers = {
     }
 
   },
-  delete: async (req, res) => {
-    await articleDa.delete(req.params.id)
+  delete: async (req, res, next) => {
+    await adsDa.delete(req.params.id)
 
     return res.json({ message: "delete article success" })
   },
-  uploadImage: async(req, res) => {
+  uploadImage: async(req, res, next) => {
     const result = await uploadImage({
       file: req.body.file,
       fileName: req.body.fileName,
-      folder: "kelak/articles"
+      folder: "kelak/ads"
     })
 
     res.json(result)
   },
   get: async (req, res, next) => {
     try {
-      const article = await articleDa.findOneByID(req.params.id)
+      const article = await adsDa.findOneByID(req.params.id)
 
       return res.json(article)
 
     } catch (error) {
       return next(error)
-
     }
 
   },
-  getTypes: (req, res) => {
+  getTypes: (req, res, next) => {
 
-    // return res.json({ message: "sasas" })
-    return res.json({ total: articleTypes.length, articleTypes: articleTypes })
+    return res.json({ total: adsTypes.length, adsTypes: adsTypes })
   },
-  getAll: async (req, res, next) => {
-    try {
-      const { skip, limit, sort, search } = await joi.validate(req.query, QSkipLimitSchema)
-      const query = stringToQueryObj(search)
-      const sortParsed = parseSort(sort)
-      const articles = await articleDa.find(query, { skip: skip, limit, sort: sortParsed })
-
-
-      return res.json(articles)
-
-    } catch (error) {
-      return next(error)
-    }
-  }
 }
 
 
