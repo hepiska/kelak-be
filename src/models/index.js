@@ -43,6 +43,7 @@ function imageUriPlugin(schema, options) {
   // })
 
   schema.post(["find", "findOne"], docs => {
+
     if (Array.isArray(docs)) {
       docs = docs.map(doc => {
         if (doc.images) {
@@ -58,8 +59,18 @@ function imageUriPlugin(schema, options) {
         return doc
       })
     } else if (docs && docs.image) {
+
+
       docs.image = docs.image.replace(imageServicesUri, "")
       docs.image = imageServicesUri + docs.image
+    } else if (docs && docs.images) {
+      docs.images = docs.images.map(image => {
+
+        image = image.replace(imageServicesUri, "")
+        image = imageServicesUri + image
+
+        return image
+      })
     }
 
   })

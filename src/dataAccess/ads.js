@@ -16,16 +16,17 @@ const adsData = {
   findOneByID: _id => {
     const condition = { _id }
 
-    return mongo.article.findOne(condition).then(res => res ? res.toObject() : null)
+    return mongo.ads.findOne(condition).populate("categories_show, articles_show")
+.then(res => res ? res.toObject() : null)
   },
 
   find: async (query, { skip = 0, limit = 15, sort }, fields) => {
     const total = await mongo.ads.find(query, fields).countDocuments()
-    const articles = await mongo.ads.find(query, fields, { skip: skip * limit, limit, sort })
+    const ads = await mongo.ads.find(query, fields, { skip: skip * limit, limit, sort })
 
     return {
       total,
-      articles
+      ads
     }
   },
   findOne: async query => {

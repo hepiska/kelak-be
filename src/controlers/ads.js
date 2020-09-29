@@ -14,6 +14,7 @@ const AdsSchema = joi.object().keys({
   start_at: joi.date().required(),
   end_at: joi.date().required(),
   summary: joi.string(),
+  refrence_url: joi.string(),
   type: joi.string(),
   articles_show: joi.array().items(joi.string()),
   collection_show: joi.array().items(joi.string()),
@@ -25,6 +26,7 @@ const QSkipLimitSchema = joi.object().keys({
   search: joi.string(),
   skip: joi.number().default(0),
   limit: joi.number().default(10),
+  status: joi.string(),
   sort: joi.string()
 })
 
@@ -32,13 +34,26 @@ const QSkipLimitSchema = joi.object().keys({
 const articleControlers = {
   getAll: async (req, res, next) => {
     try {
-      const { skip, limit, sort, search } = await joi.validate(req.query, QSkipLimitSchema)
+      const { skip, limit, sort, search, status } = await joi.validate(req.query, QSkipLimitSchema)
       const query = stringToQueryObj(search)
+      const now = new Date()
+
+      if (status === "active") {
+        query.start_at = { $lte: now }
+        query.end_at = { $gte: now }
+      }
+      if (status === "incoming") {
+        query.start_at = { $gte: now }
+      }
+      if (status === "past") {
+        query.end_at = { $lte: now }
+      }
+      console.log("===query", query)
       const sortParsed = parseSort(sort)
-      const articles = await adsDa.find(query, { skip: skip, limit, sort: sortParsed })
+      const ads = await adsDa.find(query, { skip: skip, limit, sort: sortParsed })
 
 
-      return res.json(articles)
+      return res.json(ads)
 
     } catch (error) {
       return next(error)
@@ -105,6 +120,7 @@ const articleControlers = {
   get: async (req, res, next) => {
     try {
       const article = await adsDa.findOneByID(req.params.id)
+
 
       return res.json(article)
 
