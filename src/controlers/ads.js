@@ -48,7 +48,6 @@ const articleControlers = {
       if (status === "past") {
         query.end_at = { $lte: now }
       }
-      console.log("===query", query)
       const sortParsed = parseSort(sort)
       const ads = await adsDa.find(query, { skip: skip, limit, sort: sortParsed })
 

@@ -23,6 +23,7 @@ const adsData = {
   find: async (query, { skip = 0, limit = 15, sort }, fields) => {
     const total = await mongo.ads.find(query, fields).countDocuments()
     const ads = await mongo.ads.find(query, fields, { skip: skip * limit, limit, sort })
+    .populate("categories_show, articles_show")
 
     return {
       total,
