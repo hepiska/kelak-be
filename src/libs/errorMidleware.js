@@ -1,7 +1,6 @@
 const ENV = process.env.NODE_ENV
 
 export const errorMidleware = (err, req, res, next) => {
-  console.log("====masuk sini")
   if (!err) {
     return next
   }

@@ -72,7 +72,6 @@ const userControler = {
     try {
       const userInput = await joi.validate(req.body, UserSchema, { stripUnknown: true })
 
-      console.log("====masuk sini", userInput)
 
       await userDA.update({ _id: req.params.id }, { ...userInput })
 
