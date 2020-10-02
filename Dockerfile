@@ -1,4 +1,5 @@
 FROM node:alpine
+LABEL org.opencontainers.image.source https://github.com/hepiska/kelak-be
 
 WORKDIR /usr/src/be
 
