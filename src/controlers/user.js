@@ -1,6 +1,7 @@
 import joi from "@hapi/joi"
 import userDA from "dataAccess/user"
 import { sendTextEmail } from "service/mail"
+import { userRoles } from "utis/constants"
 import randomstring from "randomstring"
 import { parseSort, stringToQueryObj } from "libs/helpers"
 
@@ -9,7 +10,7 @@ const UserSchema = joi.object().keys({
   name: joi.string().required(),
   phone_number: joi.string(),
   email: joi.string().required(),
-  images: joi.array().items(joi.string()),
+  images: joi.string(),
   roles: joi.array().items(joi.string()),
 })
 
@@ -71,7 +72,9 @@ const userControler = {
     try {
       const userInput = await joi.validate(req.body, UserSchema, { stripUnknown: true })
 
-      await userDA.update({ _id: res.params.id }, { ...userInput })
+      console.log("====masuk sini", userInput)
+
+      await userDA.update({ _id: req.params.id }, { ...userInput })
 
 
       return res.json({ message: "update user success" })
@@ -91,7 +94,11 @@ const userControler = {
     } catch (error) {
       return next(error)
     }
-  }
+  },
+  getRoles: (req, res, next) => {
+
+    return res.json({ total: userRoles.length, userRoles: userRoles })
+  },
 
 }
 

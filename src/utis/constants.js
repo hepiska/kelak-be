@@ -9,3 +9,7 @@ export const adsTypes = [
     value: "main" }, { name: "Category", value: "category" },
     { name: "Article", value: "article" }]
 
+
+export const userRoles = [{ name: "Admin", value: "admin" },
+{ name: "Editor", value: "editor" }, { name: "Default", value: "default" }]
+
