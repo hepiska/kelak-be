@@ -32,7 +32,7 @@ app.use(resJsonOnData)
 app.use("/doc", swaggerUi.serve, swaggerUi.setup(swaggerDocument))
 
 app.use("/alive", (req, res) => {
-  return res.json("alive")
+  return res.json("alive new")
 })
 
 app.use("/", useRouter(express))
