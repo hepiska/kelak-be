@@ -90,5 +90,6 @@ jobs:
           port: 22
           script: |
             cd ./kelak-dev
-            ls
+            docker rm -f kelak-api
+            docker rmi -f ghcr.io/hepiska/kelakbe 
             docker-compose up -d api
