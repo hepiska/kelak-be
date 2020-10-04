@@ -90,4 +90,5 @@ jobs:
           port: 22
           script: |
             cd ./kelak-dev
+            ls
             docker-compose up -d api
