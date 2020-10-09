@@ -15,6 +15,7 @@ const ArticleSchema = joi.object().keys({
   summary: joi.string(),
   video_uri: joi.string(),
   source_name: joi.string(),
+  podcast_uri: joi.string(),
   source_uri: joi.string(),
   isHeadline: joi.boolean(),
   content: joi.string().required()

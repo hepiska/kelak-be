@@ -42,6 +42,7 @@ $.schema = new Schema({
   },
   images: [String],
   video_uri: String,
+  podcast_uri: String,
   source_name: String,
   source_uri: String,
   content: String
