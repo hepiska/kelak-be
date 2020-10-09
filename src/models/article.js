@@ -41,6 +41,9 @@ $.schema = new Schema({
     ref: "User"
   },
   images: [String],
+  video_uri: String,
+  source_name: String,
+  source_uri: String,
   content: String
 },
   {

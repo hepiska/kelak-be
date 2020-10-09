@@ -13,6 +13,9 @@ const ArticleSchema = joi.object().keys({
   images: joi.array().items(joi.string()),
   type: joi.string().required(),
   summary: joi.string(),
+  video_uri: joi.string(),
+  source_name: joi.string(),
+  source_uri: joi.string(),
   isHeadline: joi.boolean(),
   content: joi.string().required()
 })
@@ -89,6 +92,7 @@ const articleControlers = {
     try {
       const { skip, limit, sort, search } = await joi.validate(req.query, QSkipLimitSchema)
       const query = stringToQueryObj(search)
+
       const sortParsed = parseSort(sort)
       const articles = await articleDa.find(query, { skip: skip, limit, sort: sortParsed })
 
