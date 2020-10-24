@@ -15,7 +15,6 @@ export const parseSort = sort => {
 
 
 export const stringToQueryObj = queries => {
-  console.log(queries)
   if (queries) {
     return queries.split(",").reduce((sum, queriPair) => {
       const [keyConstraint, value] = queriPair.split(":")
