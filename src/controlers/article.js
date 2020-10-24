@@ -24,6 +24,7 @@ const ArticleSchema = joi.object().keys({
 
 const QSkipLimitSchema = joi.object().keys({
   search: joi.string(),
+  category: joi.string(),
   skip: joi.number().default(0),
   limit: joi.number().default(10),
   sort: joi.string()
