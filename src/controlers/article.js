@@ -103,8 +103,12 @@ const articleControlers = {
   },
   getAll: async (req, res, next) => {
     try {
-      const { skip, limit, sort, search } = await joi.validate(req.query, QSkipLimitSchema)
+      const { skip, limit, sort, search, category } = await joi.validate(req.query, QSkipLimitSchema)
       const query = stringToQueryObj(search)
+
+      if (category) {
+        query.categories = category
+      }
 
       const sortParsed = parseSort(sort)
       const articles = await articleDa.find(query, { skip: skip, limit, sort: sortParsed })

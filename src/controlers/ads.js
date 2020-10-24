@@ -35,7 +35,7 @@ const QSkipLimitSchema = joi.object().keys({
 const articleControlers = {
   getAll: async (req, res, next) => {
     try {
-      const { skip, limit, sort, search, status, category } = await joi.validate(req.query, QSkipLimitSchema)
+      const { skip, limit, sort, search, status, } = await joi.validate(req.query, QSkipLimitSchema)
       const query = stringToQueryObj(search)
       const now = new Date()
 
@@ -46,9 +46,7 @@ const articleControlers = {
       if (status === "incoming") {
         query.start_at = { $gte: now }
       }
-      if (category) {
-        query.categories = category
-      }
+
       if (status === "past") {
         query.end_at = { $lte: now }
       }
