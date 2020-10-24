@@ -63,6 +63,17 @@ const CategoryController = {
     }
 
   },
+  getbySlug: async (req, res) => {
+    try {
+      const article = await categoryDa.findOne({ slug: req.params.slug })
+
+      res.json(article)
+
+    } catch (error) {
+      throw error
+    }
+
+  },
   getAll: async (req, res) => {
     try {
       const { skip, limit, sort, search } = await joi.validate(req.query, QSkipLimitSchema)

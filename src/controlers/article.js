@@ -84,6 +84,18 @@ const articleControlers = {
     }
 
   },
+  getbySlug: async (req, res, next) => {
+    try {
+      const article = await articleDa.findOne({ slug: req.params.slug })
+
+      return res.json(article)
+
+    } catch (error) {
+      return next(error)
+
+    }
+
+  },
   getTypes: (req, res) => {
 
     // return res.json({ message: "sasas" })

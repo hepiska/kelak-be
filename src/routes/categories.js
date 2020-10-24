@@ -4,6 +4,7 @@ import { reqUserFromToken } from "libs/jwt"
 
 module.exports = express =>
   new express.Router()
+    .get("/slug/:slug", category.getbySlug)
     .get("", category.getAll)
     .get("/:id", category.get)
     .use(reqUserFromToken)
