@@ -35,7 +35,7 @@ const articleDa = {
     }
   },
   findOne: async query => {
-    const article = await mongo.articles.findOne(query).then(res => res ? res.toObject() : null)
+    const article = await mongo.article.findOne(query).then(res => res ? res.toObject() : null)
 
     return article
   },
