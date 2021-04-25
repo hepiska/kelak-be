@@ -27,7 +27,7 @@ const articleDa = {
 
   find: async (query, { skip = 0, limit = 15, sort }, fields) => {
     const total = await mongo.article.find(query, fields).countDocuments()
-    const articles = await mongo.article.find(query, fields, { skip: skip * limit, limit, sort })
+    const articles = await mongo.article.find(query, fields, { skip: skip * limit, limit, sort }).populate("categories")
 
     return {
       total,

@@ -8,6 +8,5 @@ module.exports = express =>
     .get("/roles", user.getRoles)
     .get("/:id", user.get)
     .get("", user.getAll)
-
     .delete("/:id", user.delete)
     .put("/:id", user.put)

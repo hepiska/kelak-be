@@ -10,6 +10,6 @@ export const adsTypes = [
     { name: "Article", value: "article" }]
 
 
-export const userRoles = [{ name: "Admin", value: "admin" },
+export const userRoles = [{ name: "Admin", value: "admin" }, { name: "Writer", value: "writer" },
 { name: "Editor", value: "editor" }, { name: "Default", value: "default" }]
 

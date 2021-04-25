@@ -50,7 +50,10 @@ function imageUriPlugin(schema, options) {
           doc.images = doc.images.map(image => {
 
             image = image.replace(imageServicesUri, "")
-            image = imageServicesUri + image
+            if (!(image.includes("http://") || image.includes("https://"))) {
+              image = imageServicesUri + image
+
+            }
 
             return image
           })
