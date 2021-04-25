@@ -65,12 +65,20 @@ function imageUriPlugin(schema, options) {
 
 
       docs.image = docs.image.replace(imageServicesUri, "")
+
+      if (!(docs.image.includes("http://") || docs.image.includes("https://"))) {
+        docs.image = imageServicesUri + docs.image
+
+      }
       docs.image = imageServicesUri + docs.image
     } else if (docs && docs.images) {
       docs.images = docs.images.map(image => {
 
         image = image.replace(imageServicesUri, "")
-        image = imageServicesUri + image
+        if (!(image.includes("http://") || image.includes("https://"))) {
+          image = imageServicesUri + image
+
+        }
 
         return image
       })
