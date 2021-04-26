@@ -1,4 +1,6 @@
 import articleDa from "dataAccess/article"
+import categoryModel from "models/category"
+
 import joi from "@hapi/joi"
 import { parseSort, stringToQueryObj } from "libs/helpers"
 import { uploadImage } from "libs/images"
@@ -107,8 +109,11 @@ const articleControlers = {
       const { skip, limit, sort, search, category } = await joi.validate(req.query, QSkipLimitSchema)
       const query = stringToQueryObj(search)
 
+
       if (category) {
-        query.categories = category
+        const cat = await categoryModel.find({ slug: query })
+
+        query.categories = cat._id
       }
 
       const sortParsed = parseSort(sort)
