@@ -111,7 +111,7 @@ const articleControlers = {
 
 
       if (category) {
-        const cat = await categoryModel.find({ slug: query })
+        const cat = await categoryModel.find({ slug: category })
 
         query.categories = cat._id
       }
