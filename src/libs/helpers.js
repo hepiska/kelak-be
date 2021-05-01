@@ -25,7 +25,7 @@ export const stringToQueryObj = queries => {
         const que = {}
 
         if (constrain === "regex") {
-          que[`$${constrain}`] = new RegExp(value)
+          que[`$${constrain}`] = new RegExp(value, "i")
         } else {
           que[`$${constrain}`] = value
 
