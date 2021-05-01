@@ -117,6 +117,7 @@ const articleControlers = {
       }
 
       const sortParsed = parseSort(sort)
+
       const articles = await articleDa.find(query, { skip: skip, limit, sort: sortParsed })
 
 

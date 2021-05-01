@@ -7,7 +7,7 @@ import morgan from "morgan"
 import { swaggerDocument } from "./swager-doc"
 import swaggerUi from "swagger-ui-express"
 import { connectDb } from "./models"
-
+import "service/cron"
 
 // import cookieParser from "cookie-parser"
 const express = require("express")
