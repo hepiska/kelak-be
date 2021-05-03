@@ -10,6 +10,7 @@ const UserSchema = joi.object().keys({
   name: joi.string().required(),
   phone_number: joi.string(),
   email: joi.string().required(),
+  password: joi.string(),
   images: joi.string(),
   roles: joi.array().items(joi.string()),
 })
@@ -51,14 +52,17 @@ const userControler = {
   post: async(req, res, next) => {
     try {
       const userInput = await joi.validate(req.body, UserSchema, { stripUnknown: true })
-      const password = randomstring.generate({ length: 5, charset: "alphabetic" })
+
+      if (!userInput.password) {
+        userInput.password = randomstring.generate({ length: 5, charset: "alphabetic" })
+      }
 
 
-      await userDA.create({ ...userInput, password })
+      await userDA.create({ ...userInput })
 
       sendTextEmail({ to: userInput.email,
         subject: "kelak password",
-        message: `akun kelak anda telah dibuat dengan pasword ${password}` })
+        message: `akun kelak anda telah dibuat dengan pasword ${userInput.password}` })
 
       return res.json({ message: "create user success" })
 

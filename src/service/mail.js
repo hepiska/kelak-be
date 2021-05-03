@@ -21,7 +21,7 @@ export const sendTextEmail = ({ to, message, subject, }) => {
 
   return gmailTransporter.sendMail(data, (err, info) => {
     if (err) {
-      throw err
+      console.error(err)
     }
 
     return info
