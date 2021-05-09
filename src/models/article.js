@@ -23,6 +23,7 @@ $.schema = new Schema({
   }],
   isHeadline: Boolean,
   summary: String,
+  isOriginal: Boolean,
   type: {
     type: String,
     required: true,
