@@ -1,4 +1,5 @@
 import { mongo } from "models"
+import { Types } from "mongoose"
 
 
 const articleDa = {
@@ -15,7 +16,6 @@ const articleDa = {
   },
   findOneByEmail: email => {
     const condition = { email }
-
 
     return mongo.article.findOne(condition).then(res => res ? res.toObject() : null)
   },
@@ -39,6 +39,47 @@ const articleDa = {
     .then(res => res ? res.toObject() : null)
 
     return article
+  },
+  groupByUser: ({ startDate, endDate, author }) => {
+
+    let $match = {
+
+    }
+
+    if (author) {
+      $match.author = Types.ObjectId(author)
+    }
+
+    let created_at = {}
+
+    if (startDate) {
+      created_at = {
+        $gte: new Date(startDate)
+      }
+    }
+
+    if (endDate) {
+      created_at = { ...created_at,
+        $lte: new Date(endDate) }
+    }
+
+    $match = Object.keys(created_at).length ? { ...$match, created_at } : $match
+    const aggregate = [
+      { $match },
+      {
+        $group: { _id: "$author", total: { $sum: 1 } }
+      },
+      { $lookup: {
+        from: "users",
+        localField: "_id",
+        foreignField: "_id",
+        as: "writer",
+      } },
+          { "$unwind": "$writer" },
+    ]
+
+
+    return mongo.article.aggregate(aggregate)
   },
 }
 

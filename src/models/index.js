@@ -97,7 +97,6 @@ const uri =
     ? process.env.MONGO_URI_TEST
     : process.env.MONGO_URI
 
-
 const dbConfig = {
   uri: uri,
   options: {
@@ -111,7 +110,8 @@ const dbConfig = {
 
 const db = {
   mongo: {},
-  mongoose
+  mongoose,
+  objectId: mongoose.Types.objectId
 }
 
 if (process.env.NODE_ENV === "development") {

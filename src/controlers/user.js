@@ -1,5 +1,6 @@
 import joi from "@hapi/joi"
 import userDA from "dataAccess/user"
+import articleDa from "dataAccess/article"
 import { sendTextEmail } from "service/mail"
 import { userRoles } from "utis/constants"
 import randomstring from "randomstring"
@@ -98,7 +99,19 @@ const userControler = {
       return next(error)
     }
   },
-  getRoles: (req, res, next) => {
+  getArticleReport: async(req, res,) => {
+    const { startDate, endDate } = req.query
+    const { user } = req
+    const q = { startDate, endDate }
+
+    if (!user.roles.includes("admin")) {
+      q.author = user._id
+    }
+    const data = await articleDa.groupByUser(q)
+
+    res.json({ total: data.length, data: data })
+  },
+  getRoles: (_, res,) => {
 
     return res.json({ total: userRoles.length, userRoles: userRoles })
   },

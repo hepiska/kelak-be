@@ -34,7 +34,7 @@ const adsData = {
     const article = await mongo.ads.findOne(query).then(res => res ? res.toObject() : null)
 
     return article
-  },
+  }
 }
 
 
